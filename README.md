@@ -1,0 +1,3 @@
+# XCAssetsCop
+
+WIP

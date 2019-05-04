@@ -60,5 +60,27 @@ RSpec.describe XCAssetsCop::Linter, '#validate_image_scale' do
       expect{ XCAssetsCop::Linter.validate_image_scale(contents_json, :individual) }.to raise_error("Expected image.pdf scale to be 'individual', got 'single' instead")
     end
   end
+
+  context 'with correct value' do
+    it 'should return true' do
+      contents_json = {'images' => [{'filename' => 'image.pdf'}], 'properties' => {'template-rendering-intent' => 'original'}}
+      expect(XCAssetsCop::Linter.validate_image_scale(contents_json, :single)).to be true
+    end
+  end
 end
 
+RSpec.describe XCAssetsCop::Linter, '#validate_file_extension' do
+  context 'with wrong value' do
+    it 'should raise an exception' do
+      contents_json = {'images' => [{'filename' => 'image.pdf'}]}
+      expect{ XCAssetsCop::Linter.validate_file_extension(contents_json, 'jpg') }.to raise_error("Expected image.pdf type to be jpg, got pdf instead")
+    end
+  end
+
+  context 'with correct value' do
+    it 'should return true' do
+      contents_json = {'images' => [{'filename' => 'image.pdf'}]}
+      expect(XCAssetsCop::Linter.validate_file_extension(contents_json, 'pdf')).to be true
+    end
+  end
+end

@@ -46,6 +46,13 @@ module XCAssetsCop
       raise StandardError, "'#{param}' is not a valid parameter.\nValid parameters: #{valid_params.join(', ')}"
     end
 
+    def self.validate_file_extension(contents_json, expected)
+      file_name = get_file_name(contents_json)
+      file_extension = file_name.split('.').last
+      return true if expected == file_extension
+      raise StandardError, "Expected #{file_name} type to be #{expected}, got #{file_extension} instead"
+    end
+
     def self.lint_file(file_path, config = nil)
       file = File.read file_path
       contents_json = JSON.parse file
@@ -53,6 +60,7 @@ module XCAssetsCop
       template_rendering_intent = config&.dig('template_rendering_intent')
       image_scale = config&.dig('image_scale')
       same_file_and_asset_name = config&.dig('same_file_and_asset_name') || false
+      file_extension = config&.dig('file_extension')
 
       errors = []
 
@@ -80,11 +88,19 @@ module XCAssetsCop
         end
       end
 
+      if file_extension
+        begin
+          validate_file_extension contents_json, file_extension
+        rescue StandardError => e
+          errors << e.message
+        end
+      end
+
       errors
     end
 
     def self.lint_files(paths)
-      config = {'template_rendering_intent' => :template, 'image_scale' => :single, 'same_file_and_asset_name' => true}
+      config = {'template_rendering_intent' => :template, 'image_scale' => :single, 'same_file_and_asset_name' => true, 'file_extension' => 'jpg'}
       errors = []
       for file_path in paths
         errors += lint_file(file_path, config)

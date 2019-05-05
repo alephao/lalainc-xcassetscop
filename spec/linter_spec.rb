@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'xcassets_cop/linter'
+require 'xcassetscop/linter'
 
 RSpec.describe XCAssetsCop::Linter, '#get_file_name' do
   it 'should return the file name' do

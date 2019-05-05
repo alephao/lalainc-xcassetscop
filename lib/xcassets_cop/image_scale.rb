@@ -1,4 +1,4 @@
-require_relative './xcassets_cop'
+require_relative './module'
 
 module XCAssetsCop
   module ImageScale

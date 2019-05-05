@@ -1,4 +1,4 @@
-require 'xcassets_cop_linter'
+require 'xcassets_cop/linter'
 
 RSpec.describe XCAssetsCop::Linter, '#get_file_name' do
   it 'should return the file name' do

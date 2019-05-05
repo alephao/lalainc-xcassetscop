@@ -1,0 +1,2 @@
+module XCAssetsCop
+end

@@ -1,5 +1,4 @@
 require 'json'
-require_relative './module'
 require_relative './template_rendering_intent'
 require_relative './image_scale'
 

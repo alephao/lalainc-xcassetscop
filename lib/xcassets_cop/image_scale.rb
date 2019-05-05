@@ -1,5 +1,3 @@
-require_relative './module'
-
 module XCAssetsCop
   module ImageScale
     SINGLE = :single

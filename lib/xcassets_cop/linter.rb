@@ -13,9 +13,9 @@ module XCAssetsCop
     def self.file_name_matches_asset_name(contents_json, file_path)
       asset_name = file_path.split('/').select { |str| str.include? '.imageset' }.first.split('.').first
       file_name = get_file_name(contents_json).split('.').first
-      return true if file_name == asset_name
+      return [] if file_name == asset_name
 
-      raise StandardError, "Expected asset name and file name to be the same, got:\nAsset name: #{asset_name}\nFile name: #{file_name}"
+      ["Expected asset name and file name to be the same, got:\nAsset name: #{asset_name}\nFile name: #{file_name}"]
     end
 
     def self.validate_image_scale(contents_json, expected)
@@ -30,19 +30,19 @@ module XCAssetsCop
       else
         raise StandardError, "Couldn't figure out the image scale"
       end
-      return true if image_scale == expected
+      return [] if image_scale == expected
 
       file_name = get_file_name contents_json
-      raise StandardError, "Expected #{file_name} scale to be '#{expected}', got '#{image_scale}' instead"
+      ["Expected #{file_name} scale to be '#{expected}', got '#{image_scale}' instead"]
     end
 
     def self.validate_template_rendering_intent(contents_json, expected)
       validate_params expected, TemplateRenderingIntent.available_values
       template_rendering_intent = contents_json&.dig('properties')&.dig('template-rendering-intent') || TemplateRenderingIntent::DEFAULT
-      return true if template_rendering_intent == expected
+      return [] if template_rendering_intent == expected
 
       file_name = get_file_name contents_json
-      raise StandardError, "Expected #{file_name} to be rendered as '#{expected}', got '#{template_rendering_intent}' instead"
+      ["Expected #{file_name} to be rendered as '#{expected}', got '#{template_rendering_intent}' instead"]
     end
 
     def self.validate_params(param, valid_params)
@@ -54,9 +54,9 @@ module XCAssetsCop
     def self.validate_file_extension(contents_json, expected)
       file_name = get_file_name(contents_json)
       file_extension = file_name.split('.').last
-      return true if expected == file_extension
+      return [] if expected == file_extension
 
-      raise StandardError, "Expected #{file_name} type to be #{expected}, got #{file_extension} instead"
+      ["Expected #{file_name} type to be #{expected}, got #{file_extension} instead"]
     end
 
     def self.lint_file(file_path, config = nil)
@@ -70,37 +70,10 @@ module XCAssetsCop
 
       errors = []
 
-      if template_rendering_intent
-        begin
-          validate_template_rendering_intent contents_json, template_rendering_intent
-        rescue StandardError => e
-          errors << e.message
-        end
-      end
-
-      if image_scale
-        begin
-          validate_image_scale contents_json, image_scale
-        rescue StandardError => e
-          errors << e.message
-        end
-      end
-
-      if same_file_and_asset_name
-        begin
-          file_name_matches_asset_name contents_json, file_path
-        rescue StandardError => e
-          errors << e.message
-        end
-      end
-
-      if file_extension
-        begin
-          validate_file_extension contents_json, file_extension
-        rescue StandardError => e
-          errors << e.message
-        end
-      end
+      errors += validate_template_rendering_intent(contents_json, template_rendering_intent) if template_rendering_intent
+      errors += validate_image_scale(contents_json, image_scale) if image_scale
+      errors += file_name_matches_asset_name(contents_json, file_path) if same_file_and_asset_name
+      errors += validate_file_extension(contents_json, file_extension) if file_extension
 
       errors
     end

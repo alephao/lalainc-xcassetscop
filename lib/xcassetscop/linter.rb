@@ -78,13 +78,7 @@ module XCAssetsCop
       errors
     end
 
-    def self.lint_files(paths)
-      config = {
-        'template_rendering_intent' => :template,
-        'image_scale' => :single,
-        'same_file_and_asset_name' => true,
-        'file_extension' => 'jpg'
-      }
+    def self.lint_files(paths, config)
       errors = []
       paths.each do |path|
         errors += lint_file(path, config)

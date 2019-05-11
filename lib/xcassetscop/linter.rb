@@ -38,7 +38,7 @@ module XCAssetsCop
 
     def self.validate_template_rendering_intent(contents_json, expected)
       validate_params expected, TemplateRenderingIntent.available_values
-      template_rendering_intent = contents_json&.dig('properties')&.dig('template-rendering-intent') || TemplateRenderingIntent::DEFAULT
+      template_rendering_intent = contents_json&.dig('properties')&.dig('template-rendering-intent')&.to_sym || TemplateRenderingIntent::DEFAULT
       return [] if template_rendering_intent == expected
 
       file_name = get_file_name contents_json
@@ -54,7 +54,7 @@ module XCAssetsCop
     def self.validate_file_extension(contents_json, expected)
       file_name = get_file_name(contents_json)
       file_extension = file_name.split('.').last
-      return [] if expected == file_extension
+      return [] if expected.to_sym == file_extension.to_sym
 
       ["Expected #{file_name} type to be #{expected}, got #{file_extension} instead"]
     end
@@ -63,17 +63,17 @@ module XCAssetsCop
       file = File.read file_path
       contents_json = JSON.parse file
 
-      template_rendering_intent = config&.dig('template_rendering_intent')
-      image_scale = config&.dig('image_scale')
-      same_file_and_asset_name = config&.dig('same_file_and_asset_name') || false
-      file_extension = config&.dig('file_extension')
+      template_rendering_intent = config&.dig(:template_rendering_intent)
+      image_scale = config&.dig(:image_scale)
+      same_file_and_asset_name = config&.dig(:same_file_and_asset_name) || false
+      file_extension = config&.dig(:file_extension)
 
       errors = []
 
-      errors += validate_template_rendering_intent(contents_json, template_rendering_intent) if template_rendering_intent
-      errors += validate_image_scale(contents_json, image_scale) if image_scale
-      errors += file_name_matches_asset_name(contents_json, file_path) if same_file_and_asset_name
-      errors += validate_file_extension(contents_json, file_extension) if file_extension
+      errors += validate_template_rendering_intent(contents_json, template_rendering_intent.to_sym) if template_rendering_intent
+      errors += validate_image_scale(contents_json, image_scale.to_sym) if image_scale
+      errors += file_name_matches_asset_name(contents_json, file_path.to_sym) if same_file_and_asset_name
+      errors += validate_file_extension(contents_json, file_extension.to_sym) if file_extension
 
       errors
     end

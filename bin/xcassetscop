@@ -1,4 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'xcassetscop'
-puts Hola.hi(ARGV[0])

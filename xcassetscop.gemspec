@@ -3,6 +3,7 @@
 Gem::Specification.new do |s|
   s.name        = 'xcassetscop'
   s.version     = '0.0.1'
+  s.executables << 'xcassetscop'
   s.date        = '2019-05-11'
   s.summary     = 'XCAssetsCop'
   s.description = 'Set rules for Xcode assets'

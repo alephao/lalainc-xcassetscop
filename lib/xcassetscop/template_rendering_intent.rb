@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
+require_relative 'utility'
+
 module XCAssetsCop
   module TemplateRenderingIntent
-    ORIGINAL = :original
-    TEMPLATE = :template
-    DEFAULT = :default
+    AVAILABLE_VALUES = %i[
+      original
+      template
+      default
+    ].freeze
 
-    def self.available_values
-      [ORIGINAL, TEMPLATE, DEFAULT]
+    def self.validate(value)
+      Utility.validate_params(value, AVAILABLE_VALUES)
     end
   end
 end

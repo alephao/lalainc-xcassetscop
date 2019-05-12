@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
+require_relative 'utility'
+
 module XCAssetsCop
   module ImageScale
-    SINGLE = :single
-    INDIVIDUAL = :individual
-    INDIVIDUAL_AND_SINGLE = :individual_and_single
+    AVAILABLE_VALUES = %i[
+      single
+      individual
+      individual_and_single
+    ].freeze
 
-    def self.available_values
-      [SINGLE, INDIVIDUAL, INDIVIDUAL_AND_SINGLE]
+    def self.validate(value)
+      Utility.validate_params(value, AVAILABLE_VALUES)
     end
   end
 end

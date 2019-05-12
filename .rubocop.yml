@@ -1,3 +1,7 @@
+AllCops:
+  Exclude:
+   - bundle/**/*
+
 Metrics/LineLength:
   Enabled: false
 

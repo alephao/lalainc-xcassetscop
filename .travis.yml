@@ -1,0 +1,15 @@
+language: ruby
+cache:
+  directories:
+    - bundle
+
+bundler_args: "--without documentation --path bundle"
+
+rvm:
+  - 2.5.5
+
+script:
+  - echo "Running Tests"
+  - bundle exec rake test
+  - echo "Running Rubocop"
+  - bundle exec rubocop

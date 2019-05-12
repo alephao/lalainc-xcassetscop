@@ -22,7 +22,7 @@ module XCAssetsCop
         puts "Found #{errors.size} offenses:"
         puts errors
       else
-        puts "No errors found"
+        puts 'No errors found'
       end
     end
   end

@@ -9,8 +9,8 @@ module XCAssetsCop
     def initialize(obj)
       LinterRule.ensure_no_missing_keys obj
       LinterRule.ensure_all_keys_are_allowed obj
-      _paths = obj.sdig(:paths).map { |path| File.expand_path(path) }
-      @paths = Dir.glob(_paths)
+      expanded_paths = obj.sdig(:paths).map { |path| File.expand_path(path) }
+      @paths = Dir.glob(expanded_paths)
       @config = ConfigOptions.new obj.sdig(:config)
     end
 

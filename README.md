@@ -1,5 +1,7 @@
 # XCAssetsCop
 
+[![Build Status](https://travis-ci.org/alaphao/xcassetscop.svg?branch=master)](https://travis-ci.org/alaphao/xcassetscop)
+
 XCAssetsCop is a tool to enforce specific configurations of Xcode assets.
 
 For example, you can ensure every asset inside `Image.xcassets/icons` is rendered as template, has a single scale, and is a pdf file.

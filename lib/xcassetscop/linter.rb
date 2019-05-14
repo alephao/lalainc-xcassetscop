@@ -11,6 +11,17 @@ module XCAssetsCop
       contents_json&.dig('images')&.first&.dig('filename')
     end
 
+    def self.get_file_extension(contents_json)
+      get_file_name(contents_json).split('.').last
+    end
+
+    def self.validate_file_extension(contents_json, expected)
+      file_extension = get_file_extension(contents_json)
+      return [] if expected.to_sym == file_extension.to_sym
+
+      ["Expected #{file_name} type to be #{expected}, got #{file_extension} instead"]
+    end
+
     def self.file_name_matches_asset_name(contents_json, file_path)
       asset_name = file_path.split('/').select { |str| str.include? '.imageset' }.first.split('.').first
       file_name = get_file_name(contents_json)&.split('.')&.first
@@ -44,20 +55,16 @@ module XCAssetsCop
       ["Expected #{file_name} to be rendered as '#{expected}', got '#{template_rendering_intent}' instead"]
     end
 
-    def self.validate_file_extension(contents_json, expected)
-      file_name = get_file_name(contents_json)
-      file_extension = file_name.split('.').last
-      return [] if expected.to_sym == file_extension.to_sym
-
-      ["Expected #{file_name} type to be #{expected}, got #{file_extension} instead"]
-    end
-
     def self.validate_preserves_vector_representation(contents_json, expected)
       preserves_vector_representation = contents_json&.dig('properties')&.dig('preserves-vector-representation') || false
-      return [] if preserves_vector_representation == expected
+      file_extension = get_file_extension(contents_json)
 
       file_name = get_file_name(contents_json)
-      ["Expected #{file_name} to#{' NOT' unless expected} preserve vector representation"]
+
+      return ["#{file_name} should be a PDF file if you want to preserve vector data"] if (file_extension.to_sym != :pdf) && expected
+      return ["Expected #{file_name} to#{' NOT' unless expected} preserve vector representation"] unless preserves_vector_representation == expected
+
+      []
     end
 
     def self.lint_file(file_path, config)

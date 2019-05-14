@@ -67,6 +67,14 @@ RSpec.describe XCAssetsCop::Linter, '#validate_image_scale' do
 end
 
 RSpec.describe XCAssetsCop::Linter, '#validate_preserves_vector_representation' do
+  context 'expecting true with a non pdf asset' do
+    it 'should return error message' do
+      contents_json = { 'images' => [{ 'filename' => 'image.png' }], 'properties' => { 'preserves-vector-representation' => false } }
+      subject = XCAssetsCop::Linter.validate_preserves_vector_representation contents_json, true
+      expect(subject).to eq ['image.png should be a PDF file if you want to preserve vector data']
+    end
+  end
+
   context 'with false when expecting true' do
     it 'should return error message' do
       contents_json = { 'images' => [{ 'filename' => 'image.pdf' }], 'properties' => { 'preserves-vector-representation' => false } }

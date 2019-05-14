@@ -6,21 +6,24 @@ require_relative './image_scale'
 
 module XCAssetsCop
   class ConfigOptions
-    attr_reader :file_extension, :image_scale, :same_file_and_asset_name, :template_rendering_intent
+    attr_reader :file_extension, :image_scale, :same_file_and_asset_name, :template_rendering_intent,
+                :preserves_vector_representation
 
     ALLOWED_KEYS = %i[
       file_extension
       image_scale
       same_file_and_asset_name
       template_rendering_intent
+      preserves_vector_representation
     ].freeze
 
     def initialize(obj)
       ensure_all_keys_are_allowed obj
       @file_extension = obj.sdig('file_extension')
       @image_scale = obj.sdig('image_scale')
-      @same_file_and_asset_name = obj.sdig('same_file_and_asset_name') || false
+      @same_file_and_asset_name = obj.sdig('same_file_and_asset_name')
       @template_rendering_intent = obj.sdig('template_rendering_intent')
+      @preserves_vector_representation = obj.sdig('preserves_vector_representation')
     end
 
     private

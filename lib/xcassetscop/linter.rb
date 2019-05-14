@@ -52,21 +52,31 @@ module XCAssetsCop
       ["Expected #{file_name} type to be #{expected}, got #{file_extension} instead"]
     end
 
+    def self.validate_preserves_vector_representation(contents_json, expected)
+      preserves_vector_representation = contents_json&.dig('properties')&.dig('preserves-vector-representation') || false
+      return [] if preserves_vector_representation == expected
+
+      file_name = get_file_name(contents_json)
+      ["Expected #{file_name} to#{' NOT' unless expected} preserve vector representation"]
+    end
+
     def self.lint_file(file_path, config)
       file = File.read file_path
       contents_json = JSON.parse file
 
       template_rendering_intent = config.template_rendering_intent
       image_scale = config.image_scale
-      same_file_and_asset_name = config.same_file_and_asset_name || false
+      same_file_and_asset_name = config.same_file_and_asset_name
       file_extension = config.file_extension
+      preserves_vector_representation = config.preserves_vector_representation
 
       errors = []
 
       errors += validate_template_rendering_intent(contents_json, template_rendering_intent.to_sym) if template_rendering_intent
       errors += validate_image_scale(contents_json, image_scale.to_sym) if image_scale
-      errors += file_name_matches_asset_name(contents_json, file_path) if same_file_and_asset_name
+      errors += validate_preserves_vector_representation(contents_json, file_path) if preserves_vector_representation
       errors += validate_file_extension(contents_json, file_extension.to_sym) if file_extension
+      errors += file_name_matches_asset_name(contents_json, file_path) if same_file_and_asset_name
 
       errors
     end

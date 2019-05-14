@@ -1,6 +1,7 @@
 # XCAssetsCop
 
 [![Build Status](https://travis-ci.org/alaphao/xcassetscop.svg?branch=master)](https://travis-ci.org/alaphao/xcassetscop)
+[![Gem Version](https://badge.fury.io/rb/xcassetscop.svg)](https://badge.fury.io/rb/xcassetscop)
 
 XCAssetsCop is a tool to enforce specific configurations of Xcode assets.
 
@@ -42,7 +43,7 @@ Create a xcassetsconfig.yml, it should contain a list of objects with two proper
 
 Then run
 ```
-xcassetscop ./xcassetscop.yml
+xcassetscop lint
 ```
 
 ### Available Options for Config

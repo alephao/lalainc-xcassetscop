@@ -6,9 +6,9 @@ require_relative 'version'
 
 module XCAssetsCop
   class CLI < Thor
-    desc 'lint path/to/xcassetscop.yml', 'lint files and print errors found'
-    def lint(config_path)
-      configfile_path = File.expand_path config_path
+    desc 'lint [CONFIG FILE]', 'lint files using the configuration file provided, looks for a xcassetscop.yml if no path is provided'
+    def lint(config_path = nil)
+      configfile_path = File.expand_path(config_path || './xcassetscop.yml')
       unless File.file? configfile_path
         puts "Can't find file on path: #{configfile_path}"
         return

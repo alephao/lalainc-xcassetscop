@@ -49,7 +49,7 @@ xcassetscop lint
 ### Available Options for Config
 
 | Key | Description |
-| --- | --- | --- |
+| --- | --- |
 | template_rendering_intent | Ensures the assets have a specific template_rendering_intent value. Valid values are: **template**, **original**, **default** |
 | image_scale | Ensures the asset have a specific image scale value. Valid values are: **single**, **individual**, **individual_and_single** |
 | preserves-vector-representation | Ensures the assets preserves or not the vector information of a PDF file |

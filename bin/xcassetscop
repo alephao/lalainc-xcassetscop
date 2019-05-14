@@ -4,4 +4,4 @@
 
 require 'xcassetscop'
 
-XCAssetsCop::CLI.run ARGV
+XCAssetsCop::CLI.start ARGV

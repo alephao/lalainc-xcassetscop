@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
+require 'thor'
 require_relative 'configfile_parser'
+require_relative 'version'
 
 module XCAssetsCop
-  module CLI
-    def self.run(args)
-      configfile_path = File.expand_path args[0]
+  class CLI < Thor
+    desc 'lint path/to/xcassetscop.yml', 'lint files and print errors found'
+    def lint(config_path)
+      configfile_path = File.expand_path config_path
       unless File.file? configfile_path
         puts "Can't find file on path: #{configfile_path}"
         return
@@ -24,6 +27,11 @@ module XCAssetsCop
       else
         puts 'No errors found'
       end
+    end
+
+    desc 'version', 'print version'
+    def version
+      puts Version.version
     end
   end
 end

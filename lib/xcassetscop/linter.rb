@@ -19,6 +19,7 @@ module XCAssetsCop
       file_extension = get_file_extension(contents_json)
       return [] if expected.to_sym == file_extension.to_sym
 
+      file_name = get_file_name(contents_json)
       ["Expected #{file_name} type to be #{expected}, got #{file_extension} instead"]
     end
 
